@@ -5,6 +5,7 @@ const RuneTable = ({ results }) => {
     const [selectedRune, setSelectedRune] = useState(null);
     const [openSections, setOpenSections] = useState({});
     const [sortConfig, setSortConfig] = useState({ key: 'efficiency.max', direction: 'desc' });
+    const [filters, setFilters] = useState({ set: '', slot: '', ancient: '' });
 
     const runesPerPage = 25;
     const numPages = Math.ceil(results.length / runesPerPage);
@@ -12,6 +13,35 @@ const RuneTable = ({ results }) => {
     const resultsWithRank = useMemo(() => {
         return results.map((rune, index) => ({ ...rune, rank: index + 1 }));
     }, [results]);
+
+    const uniqueSets = useMemo(() => {
+        const sets = resultsWithRank.map(rune => rune.best.set);
+        return [...new Set(sets)].sort();
+    }, [resultsWithRank]);
+
+    const uniqueSlots = useMemo(() => {
+        const slots = resultsWithRank.map(rune => rune.best.slot);
+        return [...new Set(slots)].sort((a, b) => a - b);
+    }, [resultsWithRank]);
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+    };
+
+    const resetFilters = () => {
+        setFilters({ set: '', slot: '', ancient: '' });
+    };
+
+    const filteredResults = useMemo(() => {
+        return resultsWithRank.filter(rune => {
+            return (
+                (filters.set === '' || rune.best.set === filters.set) &&
+                (filters.slot === '' || rune.best.slot === parseInt(filters.slot)) &&
+                (filters.ancient === '' || (filters.ancient === 'Yes' ? rune.best.ancient : !rune.best.ancient))
+            );
+        });
+    }, [resultsWithRank, filters]);
 
     const toggleSection = (section) => {
         setOpenSections((prevOpenSections) => ({
@@ -29,7 +59,7 @@ const RuneTable = ({ results }) => {
     };
 
     const sortedResults = useMemo(() => {
-        return [...resultsWithRank].sort((a, b) => {
+        return [...filteredResults].sort((a, b) => {
             let aValue = a.best;
             let bValue = b.best;
 
@@ -61,7 +91,7 @@ const RuneTable = ({ results }) => {
             }
             return 0;
         });
-    }, [resultsWithRank, sortConfig]);
+    }, [filteredResults, sortConfig]);
 
     const renderSecondary = (secondary) => {
         return secondary.map((effect, index) => (
@@ -110,6 +140,47 @@ const RuneTable = ({ results }) => {
 
     return (
         <div>
+            <div>
+                <label>
+                    Set:
+                    <select
+                        name="set"
+                        value={filters.set}
+                        onChange={handleFilterChange}
+                    >
+                        <option value="">All</option>
+                        {uniqueSets.map((set, index) => (
+                            <option key={index} value={set}>{set}</option>
+                        ))}
+                    </select>
+                </label>
+                <label>
+                    Slot:
+                    <select
+                        name="slot"
+                        value={filters.slot}
+                        onChange={handleFilterChange}
+                    >
+                        <option value="">All</option>
+                        {uniqueSlots.map((slot, index) => (
+                            <option key={index} value={slot}>{slot}</option>
+                        ))}
+                    </select>
+                </label>
+                <label>
+                    Ancient:
+                    <select
+                        name="ancient"
+                        value={filters.ancient}
+                        onChange={handleFilterChange}
+                    >
+                        <option value="">All</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </label>
+                <button onClick={resetFilters}>Reset Filters</button>
+            </div>
             <table>
                 <thead>
                 <tr>
