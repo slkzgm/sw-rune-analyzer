@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './styles/UploadForm.css';
 
 const UploadForm = ({ setResults }) => {
     const [file, setFile] = useState(null);
@@ -34,7 +35,7 @@ const UploadForm = ({ setResults }) => {
     return (
         <form onSubmit={handleSubmit}>
             <input type="file" onChange={handleFileChange} />
-            <button type="submit">Upload</button>
+            <button type="submit" disabled={loading}>Upload</button>
             {loading && <p>Loading...</p>}
         </form>
     );

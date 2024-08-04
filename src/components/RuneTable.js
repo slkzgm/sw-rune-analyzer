@@ -1,4 +1,8 @@
 import React, { useState, useMemo } from 'react';
+import Filter from './Filter';
+import RuneDetails from './RuneDetails';
+import Pagination from './Pagination';
+import './styles/RuneTable.css';
 
 const RuneTable = ({ results }) => {
     const [page, setPage] = useState(0);
@@ -101,87 +105,18 @@ const RuneTable = ({ results }) => {
         ));
     };
 
-    const renderRuneDetails = (runes) => (
-        <table>
-            <thead>
-            <tr>
-                <th>Set</th>
-                <th>Slot</th>
-                <th>Ancient</th>
-                <th>Stars</th>
-                <th>Level</th>
-                <th>Quality</th>
-                <th>Primary</th>
-                <th>Innate</th>
-                <th>Secondary</th>
-                <th>Potential</th>
-            </tr>
-            </thead>
-            <tbody>
-            {runes.map((rune, index) => (
-                <tr key={index}>
-                    <td>{rune.set}</td>
-                    <td>{rune.slot}</td>
-                    <td>{rune.ancient ? 'Yes' : 'No'}</td>
-                    <td>{rune.stars}</td>
-                    <td>{rune.level}</td>
-                    <td>{rune.quality}</td>
-                    <td>{rune.primary}</td>
-                    <td>{rune.innate}</td>
-                    <td>{renderSecondary(rune.secondary)}</td>
-                    <td>{rune.efficiency.max}</td>
-                </tr>
-            ))}
-            </tbody>
-        </table>
-    );
-
     const currentRunes = sortedResults.slice(page * runesPerPage, (page + 1) * runesPerPage);
 
     return (
-        <div>
-            <div>
-                <label>
-                    Set:
-                    <select
-                        name="set"
-                        value={filters.set}
-                        onChange={handleFilterChange}
-                    >
-                        <option value="">All</option>
-                        {uniqueSets.map((set, index) => (
-                            <option key={index} value={set}>{set}</option>
-                        ))}
-                    </select>
-                </label>
-                <label>
-                    Slot:
-                    <select
-                        name="slot"
-                        value={filters.slot}
-                        onChange={handleFilterChange}
-                    >
-                        <option value="">All</option>
-                        {uniqueSlots.map((slot, index) => (
-                            <option key={index} value={slot}>{slot}</option>
-                        ))}
-                    </select>
-                </label>
-                <label>
-                    Ancient:
-                    <select
-                        name="ancient"
-                        value={filters.ancient}
-                        onChange={handleFilterChange}
-                    >
-                        <option value="">All</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-                </label>
-                <button onClick={resetFilters}>Reset Filters</button>
-            </div>
-            <table>
+        <div className="rune-table-container">
+            <Filter
+                filters={filters}
+                uniqueSets={uniqueSets}
+                uniqueSlots={uniqueSlots}
+                handleFilterChange={handleFilterChange}
+                resetFilters={resetFilters}
+            />
+            <table className="rune-table">
                 <thead>
                 <tr>
                     <th onClick={() => handleSort('rank')}>Rank</th>
@@ -215,39 +150,17 @@ const RuneTable = ({ results }) => {
                 ))}
                 </tbody>
             </table>
-            <div>
-                <button onClick={() => setPage(0)} disabled={page === 0}>
-                    First
-                </button>
-                <button onClick={() => setPage(page - 1)} disabled={page === 0}>
-                    Previous
-                </button>
-                <button onClick={() => setPage(page + 1)} disabled={page === numPages - 1}>
-                    Next
-                </button>
-                <button onClick={() => setPage(numPages - 1)} disabled={page === numPages - 1}>
-                    Last
-                </button>
-            </div>
+            <Pagination
+                page={page}
+                setPage={setPage}
+                numPages={numPages}
+            />
             {selectedRune && (
-                <div>
-                    <h2>Rune Details</h2>
-                    {['base', 'percents', 'speed', 'flat', 'others'].map((section) => (
-                        <div key={section} className="accordion-section">
-                            <h3
-                                className="accordion-header"
-                                onClick={() => toggleSection(section)}
-                            >
-                                {section.charAt(0).toUpperCase() + section.slice(1)} {section === 'base' ? '' : 'Gems'}
-                            </h3>
-                            {openSections[section] && selectedRune[section] && (
-                                <div className={`accordion-content ${openSections[section] ? 'open' : ''}`}>
-                                    {renderRuneDetails(selectedRune[section])}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
+                <RuneDetails
+                    selectedRune={selectedRune}
+                    toggleSection={toggleSection}
+                    openSections={openSections}
+                />
             )}
         </div>
     );
