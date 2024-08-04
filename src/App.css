@@ -1,0 +1,62 @@
+.App {
+  text-align: center;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 80%;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+.accordion-section {
+  margin-bottom: 10px;
+}
+
+.accordion-header {
+  background-color: #f2f2f2;
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.accordion-header:hover {
+  background-color: #e2e2e2;
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0 10px;
+  background-color: #fafafa;
+}
+
+.accordion-content.open {
+  max-height: 1000px;
+  padding: 10px;
+}
