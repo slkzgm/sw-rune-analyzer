@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/RuneDetails.css';
 
 const renderSecondary = (secondary) => {
     return secondary.map((effect, index) => (
@@ -46,6 +47,10 @@ const renderRuneDetails = (runes) => (
 const RuneDetails = ({ selectedRune, toggleSection, openSections }) => (
     <div>
         <h2>Rune Details</h2>
+        <div className="rune-info">
+            <div><strong>ID:</strong> {selectedRune.base[0].id}</div>
+            <div className="location"><strong>Location:</strong> {selectedRune.base[0].location}</div>
+        </div>
         {['base', 'percents', 'speed', 'flat', 'others'].map((section) => (
             <div key={section} className="accordion-section">
                 <h3
