@@ -2,14 +2,6 @@
   text-align: center;
 }
 
-form {
-  margin-bottom: 20px;
-}
-
-input[type="file"] {
-  margin-bottom: 10px;
-}
-
 button {
   padding: 10px 20px;
   background-color: #007bff;

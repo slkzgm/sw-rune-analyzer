@@ -36,6 +36,28 @@
     width: 80%;
 }
 
+.rune-table th, .rune-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.rune-table th {
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+
+.rune-table th:hover {
+    background-color: #ddd;
+}
+
+.rune-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.rune-table tr:hover {
+    background-color: #ddd;
+}
+
 .pagination-buttons {
     display: flex;
     justify-content: center;

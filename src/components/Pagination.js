@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/Pagination.css';
 
 const Pagination = ({ page, setPage, numPages }) => (
     <div className="pagination-buttons">
