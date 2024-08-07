@@ -19,13 +19,19 @@ const App = () => {
         localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
     }, [isDarkMode]);
 
+    const toggleDarkMode = () => setIsDarkMode(prevMode => !prevMode);
+
     return (
         <div className="App">
             <header>
                 <h1>Rune Analyzer</h1>
-                <button onClick={() => setIsDarkMode(!isDarkMode)}>
-                    {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-                </button>
+                <div className="theme-switch-container">
+                    <span className="theme-switch-label">Enable Dark Mode:</span>
+                    <label className="theme-switch">
+                        <input type="checkbox" checked={isDarkMode} onChange={toggleDarkMode} />
+                        <span className="slider round"></span>
+                    </label>
+                </div>
             </header>
             <UploadForm setResults={setResults} />
             <RuneTable results={results} />
