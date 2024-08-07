@@ -15,7 +15,18 @@ const RuneTable = ({ results }) => {
     const numPages = Math.ceil(results.length / runesPerPage);
 
     const resultsWithRank = useMemo(() => {
-        return results.map((rune, index) => ({ ...rune, rank: index + 1 }));
+        return results.map((rune, index) => {
+            const efficiencyCurrent = parseFloat(rune.base[0].efficiency.current);
+            const efficiencyMax = parseFloat(rune.best.efficiency.max);
+            const diff = efficiencyMax - efficiencyCurrent;
+            return {
+                ...rune,
+                rank: index + 1,
+                efficiencyCurrent,
+                efficiencyMax,
+                diff
+            };
+        });
     }, [results]);
 
     const uniqueSets = useMemo(() => {
@@ -64,22 +75,26 @@ const RuneTable = ({ results }) => {
 
     const sortedResults = useMemo(() => {
         return [...filteredResults].sort((a, b) => {
-            let aValue = a.best;
-            let bValue = b.best;
+            let aValue, bValue;
 
             if (sortConfig.key === 'rank') {
                 aValue = a.rank;
                 bValue = b.rank;
-            } else if (sortConfig.key.includes('.')) {
-                const keys = sortConfig.key.split('.');
-                aValue = keys.reduce((obj, key) => obj[key], a.best);
-                bValue = keys.reduce((obj, key) => obj[key], b.best);
+            } else if (sortConfig.key === 'efficiency.current') {
+                aValue = a.efficiencyCurrent;
+                bValue = b.efficiencyCurrent;
+            } else if (sortConfig.key === 'efficiency.max') {
+                aValue = a.efficiencyMax;
+                bValue = b.efficiencyMax;
+            } else if (sortConfig.key === 'diff') {
+                aValue = a.diff;
+                bValue = b.diff;
             } else {
                 aValue = a.best[sortConfig.key];
                 bValue = b.best[sortConfig.key];
             }
 
-            if (sortConfig.key === 'efficiency.max' || sortConfig.key === 'rank' || sortConfig.key === 'level') {
+            if (['efficiency.max', 'rank', 'level', 'efficiency.current', 'diff', 'slot'].includes(sortConfig.key)) {
                 aValue = parseFloat(aValue);
                 bValue = parseFloat(bValue);
             } else {
@@ -129,6 +144,8 @@ const RuneTable = ({ results }) => {
                     <th>Primary</th>
                     <th>Innate</th>
                     <th>Secondary</th>
+                    <th onClick={() => handleSort('efficiency.current')}>Current</th>
+                    <th onClick={() => handleSort('diff')}>Diff</th>
                     <th onClick={() => handleSort('efficiency.max')}>Potential</th>
                 </tr>
                 </thead>
@@ -145,7 +162,9 @@ const RuneTable = ({ results }) => {
                         <td>{runeConfig.best.primary}</td>
                         <td>{runeConfig.best.innate}</td>
                         <td>{renderSecondary(runeConfig.best.secondary)}</td>
-                        <td>{runeConfig.best.efficiency.max}</td>
+                        <td>{runeConfig.efficiencyCurrent}</td>
+                        <td>{runeConfig.diff.toFixed(2)}</td>
+                        <td>{runeConfig.efficiencyMax}</td>
                     </tr>
                 ))}
                 </tbody>
