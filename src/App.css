@@ -1,3 +1,13 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
 .App {
   text-align: center;
 }
@@ -19,6 +29,22 @@ button:disabled {
 
 button:hover:not(:disabled) {
   background-color: #0056b3;
+}
+
+button.dark-mode {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+header h1 {
+  margin: 0;
 }
 
 table {
@@ -44,6 +70,19 @@ tr:hover {
   background-color: #ddd;
 }
 
+body.dark-mode .rune-table th {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+body.dark-mode .rune-table tr:nth-child(even) {
+  background-color: #2c2c2c;
+}
+
+body.dark-mode .rune-table tr:hover {
+  background-color: #444444;
+}
+
 .accordion-section {
   margin-bottom: 10px;
 }
@@ -61,6 +100,11 @@ tr:hover {
   background-color: #e2e2e2;
 }
 
+body.dark-mode .accordion-header {
+  background-color: #333333;
+  color: #ffffff;
+}
+
 .accordion-content {
   max-height: 0;
   overflow: hidden;
@@ -69,6 +113,10 @@ tr:hover {
   border-radius: 4px;
   padding: 0 10px;
   background-color: #fafafa;
+}
+
+body.dark-mode .accordion-content {
+  background-color: #2c2c2c;
 }
 
 .accordion-content.open {

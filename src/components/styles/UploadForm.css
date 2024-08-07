@@ -24,3 +24,24 @@ select {
 .loading-text {
     margin-top: 10px;
 }
+
+/* Dark mode styles */
+body.dark-mode .form-container {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark-mode input[type="file"] {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+body.dark-mode label {
+    color: #ffffff;
+}
+
+body.dark-mode select {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #555555;
+}
