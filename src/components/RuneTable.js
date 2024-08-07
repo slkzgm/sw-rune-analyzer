@@ -79,7 +79,7 @@ const RuneTable = ({ results }) => {
                 bValue = b.best[sortConfig.key];
             }
 
-            if (sortConfig.key === 'efficiency.max' || sortConfig.key === 'rank') {
+            if (sortConfig.key === 'efficiency.max' || sortConfig.key === 'rank' || sortConfig.key === 'level') {
                 aValue = parseFloat(aValue);
                 bValue = parseFloat(bValue);
             } else {
@@ -124,7 +124,7 @@ const RuneTable = ({ results }) => {
                     <th onClick={() => handleSort('slot')}>Slot</th>
                     <th>Ancient</th>
                     <th>Stars</th>
-                    <th>Level</th>
+                    <th onClick={() => handleSort('level')}>Level</th>
                     <th>Quality</th>
                     <th>Primary</th>
                     <th>Innate</th>
