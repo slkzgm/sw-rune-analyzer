@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Filter from './Filter';
 import RuneDetails from './RuneDetails';
 import Pagination from './Pagination';
@@ -12,7 +12,6 @@ const RuneTable = ({ results }) => {
     const [filters, setFilters] = useState({ set: '', slot: '', ancient: '' });
 
     const runesPerPage = 25;
-    const numPages = Math.ceil(results.length / runesPerPage);
 
     const resultsWithRank = useMemo(() => {
         return results.map((rune, index) => {
@@ -112,6 +111,13 @@ const RuneTable = ({ results }) => {
         });
     }, [filteredResults, sortConfig]);
 
+    useEffect(() => {
+        setPage(0);
+    }, [filters, sortConfig]);
+
+    const numPages = Math.ceil(filteredResults.length / runesPerPage);
+    const currentRunes = sortedResults.slice(page * runesPerPage, (page + 1) * runesPerPage);
+
     const renderSecondary = (secondary) => {
         return secondary.map((effect, index) => (
             <span key={index} style={{ color: effect.includes('⟳') ? '#ff7300' : 'inherit' }}>
@@ -119,8 +125,6 @@ const RuneTable = ({ results }) => {
             </span>
         ));
     };
-
-    const currentRunes = sortedResults.slice(page * runesPerPage, (page + 1) * runesPerPage);
 
     return (
         <div className="rune-table-container">
